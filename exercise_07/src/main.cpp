@@ -22,11 +22,11 @@ void loop() {
 }
 
 double transformValueToVoltage(int value) {
-  return ((value + 20.0) / 1023.0 * 5) - 0.1;
+  return (((double)value + 20.0) / 1023.0 * 5) - 0.1;
 }
 
 double transformVoltageToTempCelsius(double value) {
-  return   (value - 0.2) * (1.75 + 40) / (1.75 - 0.2) - 40;
+  return (value - 0.1) * (125 - (-40)) / (1.75 - 0.1) - 40;
 }
 
 void turnOnLed(int led) {
