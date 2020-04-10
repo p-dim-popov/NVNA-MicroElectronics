@@ -1,1 +1,1 @@
-./src/main.cpp
+Решението на всяка задача е в /exercise_XX/src/main.cpp като се пропуска първия ред с #include "Arduino.h" ако ще се ползва за .ino проекти
