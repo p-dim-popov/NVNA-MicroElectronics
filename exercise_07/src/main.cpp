@@ -12,6 +12,8 @@
 #define MEANINGFUL_CHANGE 0.0001
 #define SENSOR_MAX 1023
 #define SENSOR_MIN 0
+#define IS ==
+
 
 int lastSensorValue = -1;
 int maxSensorValue = SENSOR_MIN;
@@ -39,6 +41,7 @@ void loop() {
   double sensorVoltage = transformValueToVoltage(sensorValue);
   double sensorTemperature = transformVoltageToTempCelsius(sensorVoltage);
   int8_t sensorTemperatureStatus = checkTemp(sensorTemperature);
+
   if (sensorTemperatureStatus == IS_COLD)
   {
     turnOffLed(redLed);
