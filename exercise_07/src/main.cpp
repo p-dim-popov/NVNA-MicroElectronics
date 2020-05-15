@@ -5,14 +5,15 @@
 #define BAUD_RATE 9600
 #define LOWER_TEMP_BOUND 0
 #define HIGHER_TEMP_BOUND 40
-#define IS_HOT 1
-#define IS_COLD -1
-#define IS_NORMAL 0
+#define HOT 1
+#define COLD -1
+#define NORMAL 0
 #define FIRST_TIME lastSensorValue == -1
 #define MEANINGFUL_CHANGE 0.0001
 #define SENSOR_MAX 1023
 #define SENSOR_MIN 0
 #define IS ==
+#define IS_MORE_THAN >
 
 
 int lastSensorValue = -1;
@@ -23,7 +24,7 @@ double transformValueToVoltage(int value);
 double transformVoltageToTempCelsius(double value);
 void turnOnLed(int led);
 void turnOffLed(int led);
-int8_t checkTemp(double temp);
+int8_t checkTempStatus(double temp);
 void printInfo();
 
 void setup() {
@@ -40,14 +41,14 @@ void loop() {
   lastSensorValue = FIRST_TIME ? sensorValue : lastSensorValue;
   double sensorVoltage = transformValueToVoltage(sensorValue);
   double sensorTemperature = transformVoltageToTempCelsius(sensorVoltage);
-  int8_t sensorTemperatureStatus = checkTemp(sensorTemperature);
+  int8_t sensorTemperatureStatus = checkTempStatus(sensorTemperature);
 
-  if (sensorTemperatureStatus == IS_COLD)
+  if (sensorTemperatureStatus IS COLD)
   {
     turnOffLed(redLed);
     turnOnLed(greenLed);
   }
-  else if(sensorTemperatureStatus == IS_HOT){
+  else if(sensorTemperatureStatus IS HOT){
     turnOffLed(greenLed);
     turnOnLed(redLed);
   }
@@ -56,8 +57,16 @@ void loop() {
     turnOffLed(greenLed);
   }
   
-  if (abs(sensorValue - lastSensorValue) > MEANINGFUL_CHANGE)
+  if (abs(sensorValue - lastSensorValue) IS_MORE_THAN MEANINGFUL_CHANGE)
   {
+    printDataForTemperatureTendencies(sensorValue, sensorVoltage, sensorTemperature, lastSensorValue);
+    Serial.println();
+  }
+
+  lastSensorValue = sensorValue;
+}
+
+void printDataForTemperatureTendencies(int sensorValue, double sensorVoltage, double sensorTemperature, int lastSensorValue){
     Serial.print("Sensor value: ");
     Serial.print(sensorValue);
     Serial.print(", Voltage: ");
@@ -74,10 +83,7 @@ void loop() {
     Serial.print(transformVoltageToTempCelsius(transformValueToVoltage(maxSensorValue)));
     Serial.print(", Min temp: ");
     Serial.println(transformVoltageToTempCelsius(transformValueToVoltage(minSensorValue)));
-    Serial.println();
-  }
 
-  lastSensorValue = sensorValue;
 }
 
 double transformValueToVoltage(int value) {
@@ -95,10 +101,10 @@ void turnOffLed(int led) {
   digitalWrite(led, LOW);
 }
 
-int8_t checkTemp(double temp){
+int8_t checkTempStatus(double temp){
   return temp < LOWER_TEMP_BOUND 
-    ? IS_COLD 
+    ? COLD 
     : temp > HIGHER_TEMP_BOUND 
-      ? IS_HOT 
-      : IS_NORMAL; 
+      ? HOT 
+      : NORMAL; 
 }
