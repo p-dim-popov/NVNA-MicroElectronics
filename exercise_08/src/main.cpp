@@ -49,15 +49,17 @@ void setup() {
 }
 
 void loop() {
-  int redLedState = digitalRead(RED_LED);
-  int greenLedState = digitalRead(GREEN_LED);
+  #ifdef _DEBUG
+    int redLedState = digitalRead(RED_LED);
+    int greenLedState = digitalRead(GREEN_LED);
 
-  if (RedLedLastState != redLedState || GreenLedLastState != greenLedState)
-  {
-    PrintChanges(redLedState, greenLedState);
-    RedLedLastState = redLedState;
-    GreenLedLastState = greenLedState;
-  }
+    if (RedLedLastState != redLedState || GreenLedLastState != greenLedState)
+    {
+      PrintChanges(redLedState, greenLedState);
+      RedLedLastState = redLedState;
+      GreenLedLastState = greenLedState;
+    }
+  #endif
   
 }
 
