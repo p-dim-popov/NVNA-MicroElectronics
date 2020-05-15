@@ -1,14 +1,29 @@
 #include <Arduino.h>
+
+// ENV VAR
+#define _DEBUG
+#define is ==
+
+// PINS
 #define RED_LED 13
 #define GREEN_LED 12
-#define is ==
-#define TURN_ON_LED(LED) digitalWrite(LED, HIGH)
-#define TURN_OFF_LED(LED) digitalWrite(LED, LOW)
 #define RED_LED_BUTTON 2
 #define GREEN_LED_BUTON 3
 #define SERIAL_BAUD 9600
-#define TRACE_LINE(str) Serial.println(str)
-#define TRACE(str) Serial.print(str)
+
+// MACROS
+#define TURN_ON_LED(LED) digitalWrite(LED, HIGH)
+#define TURN_OFF_LED(LED) digitalWrite(LED, LOW)
+
+#ifdef _DEBUG
+  #define TRACE_LINE(str) Serial.println(str)
+  #define TRACE(str) Serial.print(str)
+#endif
+
+#ifndef _DEBUG
+  #define TRACE_LINE(str)
+  #define TRACE(str)
+#endif
 
 int RedLedTurnOnTime = 0;
 int GreenLedTurnOnTime = 0;
